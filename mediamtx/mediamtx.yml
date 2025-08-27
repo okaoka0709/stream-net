@@ -333,11 +333,11 @@ hlsAlwaysRemux: no
 # * mpegts - uses MPEG-TS segments, for maximum compatibility.
 # * fmp4 - uses fragmented MP4 segments, more efficient.
 # * lowLatency - uses Low-Latency HLS.
-hlsVariant: lowLatency
+hlsVariant: fmp4
 # Number of HLS segments to keep on the server.
 # Segments allow to seek through the stream.
 # Their number doesn't influence latency.
-hlsSegmentCount: 7
+hlsSegmentCount: 3
 # Minimum duration of each segment.
 # A player usually puts 3 segments in a buffer before reproducing the stream.
 # The final segment duration is also influenced by the interval between IDR frames,
@@ -763,6 +763,10 @@ paths:
   # example:
   # my_camera:
   #   source: rtsp://my_camera
+  
+  cam1:
+    source: rtsp://Admin:1234@192.168.0.250:554/stream2
+    sourceOnDemand: yes
 
   # Settings under path "all_others" are applied to all paths that
   # do not match another entry.
