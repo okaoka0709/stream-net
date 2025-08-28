@@ -1,58 +1,68 @@
 <!doctype html>
 <html lang="zh-Hant">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cam Viewer（你的人生導師版）</title>
-  <style>
-    body{margin:0;padding:24px;font-family:ui-sans-serif,system-ui}
-    video{width:100%;max-width:960px;background:#000;border-radius:12px}
-  </style>
-  <!-- Vue 2 CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.min.js"></script>
-  <!-- hls.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.12/dist/hls.min.js"></script>
-</head>
-<body>
-  <div id="app">
-    <h1 style="margin:0 0 12px;">即時監看</h1>
-    <video ref="v" controls autoplay playsinline muted></video>
-    <p v-if="error" style="color:#e11d48;font-family:ui-monospace,Menlo,monospace">{{ error }}</p>
-  </div>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>stream-net</title>
+        <style>
+            body{
+                margin: 0;
+                padding: 24px;
+                font-family: ui-sans-serif,system-ui;
+            }
 
-  <script>
-  new Vue({
-    el: '#app',
-    data: () => ({ error: '' }),
-    mounted() {
-      const video = this.$refs.v;
-      const src = '/hls/cam1/index.m3u8'; // 走我們自己的同源代理
+            video{
+                width:100%;
+                max-width:960px;
+                background: #000;
+                border-radius: 12px;
+            }
+        </style>
+        <script src="./vue.min.js"></script>
+        <script src="./hls.min.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <video ref="v" controls autoplay playsinline muted></video>
+            <p v-if="error" style="color:#e11d48;font-family:ui-monospace,Menlo,monospace">{{ error }}</p>
+        </div>
+        <script>
+            new Vue({
+                el: '#app',
+                data: () => ({
+                    error: '',
+                }),
+                mounted() {
+                    const video = this.$refs.v;
+                    const src = '/hls/cam1/index.m3u8'; // 走我們自己的同源代理
 
-      if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = src;
-        video.play().catch(e => this.error = '自動播放被擋：' + e.message);
-        return;
-      }
+                    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                        video.src = src;
+                        video.play().catch(e => this.error = '自動播放被擋：' + e.message);
+                        return;
+                    }
 
-      if (Hls.isSupported()) {
-        const hls = new Hls({
-          lowLatencyMode: true,
-          liveSyncDuration: 1.5,
-          liveMaxLatencyDuration: 3
-        });
-        hls.loadSource(src);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.ERROR, (_, data) => {
-          if (data?.fatal) {
-            this.error = `HLS FATAL ${data.type}/${data.details}`;
-            hls.destroy();
-          }
-        });
-      } else {
-        this.error = '此瀏覽器不支援 HLS/MSE。請用 Safari 或 Chrome/Edge/Firefox。';
-      }
-    }
-  });
-  </script>
-</body>
+                    if (Hls.isSupported()) {
+                        const hls = new Hls({
+                                lowLatencyMode: true,
+                                liveSyncDuration: 1.5,
+                                liveMaxLatencyDuration: 3
+                            });
+
+                        hls.loadSource(src);
+                        hls.attachMedia(video);
+                        hls.on(Hls.Events.ERROR, (_, data) => {
+
+                            if (data?.fatal) {
+                                this.error = `HLS FATAL ${data.type}/${data.details}`;
+                                hls.destroy();
+                            }
+                        });
+                    } else {
+                        this.error = '此瀏覽器不支援 HLS/MSE。請用 Safari 或 Chrome/Edge/Firefox。';
+                    }
+                }
+            });
+        </script>
+    </body>
 </html>
