@@ -1,0 +1,9 @@
+# Node.js modules
+server/node_modules/
+
+# log files
+*.log
+
+# system files
+.DS_Store
+Thumbs.db
