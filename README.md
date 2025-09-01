@@ -5,39 +5,41 @@
 ---
 
 ## 專案結構
-cam-local/
+stream-net/
 ├─ mediamtx/
-│ ├─ mediamtx.exe / mediamtx # MediaMTX 執行檔 (依照作業系統放對應版本)
-│ └─ mediamtx.yml # 攝影機來源設定
+│ ├─ mediamtx.exe #MediaMTX 執行檔
+│ └─ mediamtx.yml #攝影機來源設定
+│
+├─ node/
+│ └─ node-v22.11.0-x64.msi #node.js 安裝檔
 │
 ├─ server/
-│ ├─ index.js # Node.js 反向代理 (Express)
-│ ├─ start.js # 一鍵啟動 (同時跑 MediaMTX + Proxy)
-│ ├─ package.json # 相依套件定義
+│ ├─ index.js #Node.js 反向代理 (Express)
+│ ├─ start.js #一鍵啟動 (同時跑 MediaMTX + Proxy)
+│ ├─ package.json #相依套件定義
 │ └─ package-lock.json
 │
 ├─ web/
-│ └─ index.html # 前端頁面 (Vue 2 + hls.js)
+│ └─ index.html #前端頁面 (Vue 2 + hls.js)
 │
-├─ start-all.bat # Windows 一鍵啟動
-├─ stop-all.bat # Windows 一鍵停止
-├─ start-all.sh # macOS/Linux 一鍵啟動
+├─ start-all.bat #一鍵啟動
+├─ stop-all.bat #一鍵停止
 └─ README.md # 本文件
 
 ---
 
 ## 修改攝影機設定
-
 編輯檔案：`mediamtx/mediamtx.yml`
 
 ```yaml
     surce: rtsp://Admin:1234@192.168.0.250:554/stream2
 ```
 
+## 修改攝影機設定
 改成你自己的攝影機 RTSP URL。帳號/密碼/IP/Port 必須正確，若密碼含有特殊字元（@、# 等），請用 URL encode。
 
 ## 啟動方式
-雙擊 start-all.bat 首次啟動會自動安裝 Node.js 相依套件，預設瀏覽器會自動打開 http://localhost:3000
+雙擊 start-all.bat 首次啟動會自動安裝 Node.js 相依套件，預設瀏覽器約 5 秒後會自動打開 http://localhost:3000。
 
 ## 關閉方式
 雙擊 stop-all.bat
